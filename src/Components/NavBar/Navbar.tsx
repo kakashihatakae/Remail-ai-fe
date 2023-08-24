@@ -1,8 +1,9 @@
 import { UserButton } from "@clerk/clerk-react";
-import { AppBar, Toolbar, Typography } from "@mui/material";
-import React from "react";
+import { AppBar, Box, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
+import { FEPagePaths } from "../../Shared/constants";
 // import Container from "@mui/material/Container";
 
 const Container = styled.div`
@@ -14,11 +15,46 @@ const IconStyle = styled.div`
   cursor: pointer;
 `;
 
+const NavBarRightSection = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TabLowerCase = styled(Tab)`
+  && {
+    text-transform: none;
+    border-radius: 20px;
+    color: #030303;
+    border-color: #030303;
+  }
+`;
+
+const TabValues = {
+  HOME: 0,
+  INTEGRATIONS: 1,
+};
+
+const TabLabels = {
+  HOME: "Home",
+  INTEGRATIONS: "Manage Integrations",
+};
+
+const TabRoutes = {
+  [TabValues.HOME]: FEPagePaths.HOME,
+  [TabValues.INTEGRATIONS]: FEPagePaths.INTEGRATIONS,
+};
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const [selectedTab, setSelectedTab] = useState(TabValues.HOME);
 
   const onIconClick = () => {
     navigate("/");
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+    navigate(TabRoutes[newValue]);
   };
 
   return (
@@ -36,7 +72,15 @@ const Navbar = () => {
               R
             </Typography>
           </IconStyle>
-          <UserButton />
+          <NavBarRightSection>
+            <Box mr={2}>
+              <Tabs value={selectedTab} onChange={handleTabChange} centered>
+                <TabLowerCase label={TabLabels.HOME} />
+                <TabLowerCase label={TabLabels.INTEGRATIONS} />
+              </Tabs>
+            </Box>
+            <UserButton />
+          </NavBarRightSection>
         </Toolbar>
       </Container>
     </AppBar>

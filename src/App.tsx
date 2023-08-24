@@ -10,6 +10,8 @@ import {
   SignedIn,
   SignedOut,
 } from "@clerk/clerk-react";
+import Integrations from "./Components/Integrations/Integrations";
+import { FEPagePaths } from "./Shared/constants";
 
 const OuterContainer = styled.div`
   display: flex;
@@ -38,8 +40,15 @@ function App() {
               <Navbar />
               <Container>
                 <Routes>
-                  <Route path="/" Component={Home} />
-                  <Route path="/email_details" Component={EmailDetails} />
+                  <Route path={FEPagePaths.HOME} Component={Home} />
+                  <Route
+                    path={FEPagePaths.EMAIL_DETAILS}
+                    Component={EmailDetails}
+                  />
+                  <Route
+                    path={FEPagePaths.INTEGRATIONS}
+                    Component={Integrations}
+                  />
                 </Routes>
               </Container>
             </Router>
