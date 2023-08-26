@@ -5,7 +5,6 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import NewEmailModal from "./NewEmailModal";
-import { useAuth } from "@clerk/clerk-react";
 import { BASE_URL } from "../../Shared/constants";
 
 const AddContainer = styled.div`
@@ -50,7 +49,6 @@ const Home = () => {
   const [campaigns, setCampaigns] = useState<Requirement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showNewEmailModal, setShowNewEmailModal] = useState(false);
-  const { getToken, userId } = useAuth();
 
   const navigate = useNavigate();
 
@@ -66,12 +64,14 @@ const Home = () => {
     const getCampaignData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`${BASE_URL}/get_all_emails/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await fetch(
+          `${BASE_URL}/get_all_emails/user_2Tzg3Jq7QUhJfPoGhQasmQ3EX9u`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         const campaign = await response.json();
         setCampaigns(campaign);
       } catch (error) {
@@ -80,7 +80,7 @@ const Home = () => {
       setIsLoading(false);
     };
     getCampaignData();
-  }, [userId, getToken]);
+  }, []);
   const onAddEmail = () => {
     setShowNewEmailModal(true);
   };

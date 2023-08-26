@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@azure/msal-browser": "^3.0.2",
+    "@azure/msal-react": "^2.0.2",
     "@babel/plugin-proposal-private-property-in-object": "*",
     "@blocknote/core": "^0.9.0",
     "@blocknote/react": "^0.9.0",
