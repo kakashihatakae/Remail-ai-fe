@@ -1,10 +1,18 @@
-import { UserButton } from "@clerk/clerk-react";
-import { AppBar, Box, Tab, Tabs, Toolbar, Typography } from "@mui/material";
+// import { UserButton } from "@clerk/clerk-react";
+import {
+  AppBar,
+  Box,
+  Button,
+  Tab,
+  Tabs,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { FEPagePaths } from "../../Shared/constants";
-// import Container from "@mui/material/Container";
+import { useMsal } from "@azure/msal-react";
 
 const Container = styled.div`
   display: flex;
@@ -46,6 +54,7 @@ const TabRoutes = {
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { instance } = useMsal();
   const [selectedTab, setSelectedTab] = useState(TabValues.HOME);
 
   const onIconClick = () => {
@@ -55,6 +64,10 @@ const Navbar = () => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
     navigate(TabRoutes[newValue]);
+  };
+
+  const onLogoutClick = () => {
+    instance.logoutRedirect();
   };
 
   return (
@@ -79,7 +92,8 @@ const Navbar = () => {
                 <TabLowerCase label={TabLabels.INTEGRATIONS} />
               </Tabs>
             </Box>
-            <UserButton />
+            {/* <UserButton /> */}
+            <Button onClick={onLogoutClick}>Logout</Button>
           </NavBarRightSection>
         </Toolbar>
       </Container>

@@ -66,7 +66,6 @@ const EmailDetails = () => {
   const requirement: EmailDetailsProps = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  console.log(requirement);
 
   const regenerateEmail = async () => {
     setIsLoading(true);

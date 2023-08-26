@@ -12,7 +12,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { useAuth } from "@clerk/clerk-react";
 import { BASE_URL } from "../../Shared/constants";
 
 const NewEmailButton = styled(Button)`
@@ -48,7 +47,6 @@ const NewEmailModal = ({
   handleIsLoading,
 }: NewEmailModalProps): React.ReactElement => {
   const navigate = useNavigate();
-  const { userId } = useAuth();
   const [formData, setFormData] = useState({
     title: "Software Developer",
     onsite_remote: "",
@@ -59,7 +57,7 @@ const NewEmailModal = ({
     experience: "",
     skills: "Java, Angular",
     location: "",
-    userId: userId,
+    userId: "user_2Tzg3Jq7QUhJfPoGhQasmQ3EX9u",
   });
 
   const disableSubmitButton = !formData.skills || !formData.title;
