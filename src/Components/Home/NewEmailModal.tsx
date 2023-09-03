@@ -12,7 +12,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { BASE_URL } from "../../Shared/constants";
+// import { BASE_URL } from "../../Shared/constants";
+import {
+  createDraftMessage,
+  getGeneratedIntro,
+  saveConversationId,
+} from "./ApiHelper";
+import { useMsal } from "@azure/msal-react";
+import { useMeInfo } from "../../Shared/MeContext/MeContext";
+import { FEPagePaths } from "../../Shared/constants";
+import { getToken } from "../../Shared/SharedApiHelper/SharedApiHelper";
 
 const NewEmailButton = styled(Button)`
   && {
@@ -47,20 +56,16 @@ const NewEmailModal = ({
   handleIsLoading,
 }: NewEmailModalProps): React.ReactElement => {
   const navigate = useNavigate();
+  const { accounts, instance } = useMsal();
+  const { mail, companyName } = useMeInfo();
   const [formData, setFormData] = useState({
-    title: "Software Developer",
-    onsite_remote: "",
-    contract_type: "",
-    duration: "",
-    rate: "",
-    visa: "",
-    experience: "",
-    skills: "Java, Angular",
-    location: "",
-    userId: "user_2Tzg3Jq7QUhJfPoGhQasmQ3EX9u",
+    vendorEmail: "",
+    vendorName: "",
+    vendorCompany: "",
   });
 
-  const disableSubmitButton = !formData.skills || !formData.title;
+  const disableSubmitButton =
+    !formData.vendorCompany || !formData.vendorEmail || !formData.vendorName;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -69,22 +74,35 @@ const NewEmailModal = ({
   const handleSubmit = async () => {
     handleIsLoading(true);
     handleCloseDialog();
-    let newEmail = {};
+
     try {
-      const response = await fetch(`${BASE_URL}/new_email`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const aiEmail = await getGeneratedIntro({
+        ...formData,
+        senderName: accounts[0].name,
+        senderCompany: companyName,
+        senderEmail: mail,
       });
-      newEmail = await response.json();
+
+      const token = await getToken(accounts[0], instance);
+      const draftInfo = await createDraftMessage({
+        ...aiEmail,
+        vendorEmail: formData.vendorEmail,
+        token,
+      });
+
+      saveConversationId(
+        draftInfo?.conversationId,
+        accounts[0].localAccountId,
+        formData
+      );
+      navigate(FEPagePaths.EMAIL_DETAILS, {
+        state: draftInfo?.conversationId,
+      });
     } catch (error) {
       throw new Error(`[NewEmailModal]: ${error}`);
     }
 
     handleIsLoading(false);
-    navigate("/email_details", { state: newEmail });
   };
 
   return (
@@ -101,20 +119,11 @@ const NewEmailModal = ({
             />
           </Headline>
           <TextField
-            name="title"
-            label="Title"
+            name="vendorEmail"
+            label="Receiver Email"
+            error={!formData.vendorEmail}
             fullWidth
-            error={!formData.title.length}
-            value={formData.title}
-            onChange={handleChange}
-            margin="normal"
-            required
-          />
-          <TextField
-            name="location"
-            label="Location"
-            fullWidth
-            value={formData.location}
+            value={formData.vendorEmail}
             onChange={handleChange}
             margin="normal"
             required
@@ -122,10 +131,11 @@ const NewEmailModal = ({
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <TextField
-                name="onsite_remote"
-                label="Onsite/Remote"
+                name="vendorCompany"
+                label="Vendor Company"
                 fullWidth
-                value={formData.onsite_remote}
+                error={!formData.vendorCompany}
+                value={formData.vendorCompany}
                 onChange={handleChange}
                 margin="normal"
                 required
@@ -133,76 +143,17 @@ const NewEmailModal = ({
             </Grid>
             <Grid item xs={6}>
               <TextField
-                name="contract_type"
-                label="Contract Type"
+                name="vendorName"
+                label="Name"
                 fullWidth
-                value={formData.contract_type}
+                value={formData.vendorName}
+                error={!formData.vendorName}
                 onChange={handleChange}
                 margin="normal"
                 required
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                name="duration"
-                label="Duration"
-                fullWidth
-                value={formData.duration}
-                onChange={handleChange}
-                margin="normal"
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="rate"
-                label="Rate"
-                fullWidth
-                value={formData.rate}
-                onChange={handleChange}
-                margin="normal"
-                required
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <TextField
-                name="visa"
-                label="Visa"
-                fullWidth
-                value={formData.visa}
-                onChange={handleChange}
-                margin="normal"
-                required
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                name="experience"
-                label="Experience"
-                fullWidth
-                value={formData.experience}
-                onChange={handleChange}
-                margin="normal"
-                required
-              />
-            </Grid>
-          </Grid>
-          <TextField
-            name="skills"
-            label="Skills"
-            error={!formData.skills}
-            multiline
-            rows={3}
-            fullWidth
-            value={formData.skills}
-            onChange={handleChange}
-            margin="normal"
-            required
-          />
           <Box sx={{ mt: 2 }}>
             <NewEmailButton
               fullWidth

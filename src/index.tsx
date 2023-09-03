@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(
 
 const pca = new PublicClientApplication({
   auth: {
-    clientId: "377361c7-ee94-4cff-9a4f-e8780d52c15a",
+    clientId: process.env.REACT_APP_CLIENT_ID || "",
     authority: "https://login.microsoftonline.com/organizations",
     redirectUri: "/",
   },

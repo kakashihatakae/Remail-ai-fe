@@ -4,13 +4,13 @@ import { styled } from "styled-components";
 import Navbar from "./Components/NavBar/Navbar";
 import { FEPagePaths } from "./Shared/constants";
 import EmailDetails from "./Components/EmailDetails/EmailDetails";
-import Integrations from "./Components/Integrations/Integrations";
 import Home from "./Components/Home/Home";
 import {
   AuthenticatedTemplate,
   UnauthenticatedTemplate,
 } from "@azure/msal-react";
 import Login from "./Components/Login/Login";
+import { MeInfoProfider } from "./Shared/MeContext/MeContext";
 
 const OuterContainer = styled.div`
   display: flex;
@@ -32,22 +32,20 @@ const AppMs = () => {
     <>
       <AuthenticatedTemplate>
         <OuterContainer>
-          <Router>
-            <Navbar />
-            <Container>
-              <Routes>
-                <Route path={FEPagePaths.HOME} Component={Home} />
-                <Route
-                  path={FEPagePaths.EMAIL_DETAILS}
-                  Component={EmailDetails}
-                />
-                <Route
-                  path={FEPagePaths.INTEGRATIONS}
-                  Component={Integrations}
-                />
-              </Routes>
-            </Container>
-          </Router>
+          <MeInfoProfider>
+            <Router>
+              <Navbar />
+              <Container>
+                <Routes>
+                  <Route path={FEPagePaths.HOME} Component={Home} />
+                  <Route
+                    path={FEPagePaths.EMAIL_DETAILS}
+                    Component={EmailDetails}
+                  />
+                </Routes>
+              </Container>
+            </Router>
+          </MeInfoProfider>
         </OuterContainer>
       </AuthenticatedTemplate>
       <UnauthenticatedTemplate>

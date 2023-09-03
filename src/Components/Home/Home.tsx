@@ -5,7 +5,8 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import NewEmailModal from "./NewEmailModal";
-import { BASE_URL } from "../../Shared/constants";
+import { getAllCampaigns } from "./ApiHelper";
+import { useMsal } from "@azure/msal-react";
 
 const AddContainer = styled.div`
   display: flex;
@@ -31,52 +32,26 @@ const PaperListContainer = styled.div`
   margin-top: 25px;
 `;
 
-interface Requirement {
-  id: number;
-  title: string;
-  onsite_remote: string;
-  contract_type: string;
-  duration: string;
-  rate: string;
-  visa: string;
-  experience: string;
-  skills: string;
-  location: string;
-  email: string;
-}
-
 const Home = () => {
-  const [campaigns, setCampaigns] = useState<Requirement[]>([]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { accounts } = useMsal();
   const [showNewEmailModal, setShowNewEmailModal] = useState(false);
-
   const navigate = useNavigate();
 
   const handleIsLoading = (loading: boolean) => {
     setIsLoading(loading);
   };
 
-  const onPostClick = (jobRequierment: Requirement) => {
-    navigate("/email_details", { state: jobRequierment });
+  const onPostClick = (MSConversationId: string) => {
+    navigate("/email_details", { state: MSConversationId });
   };
 
   useEffect(() => {
     const getCampaignData = async () => {
       setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${BASE_URL}/get_all_emails/user_2Tzg3Jq7QUhJfPoGhQasmQ3EX9u`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const campaign = await response.json();
-        setCampaigns(campaign);
-      } catch (error) {
-        throw new Error("[Home]: Couldn't get emails");
-      }
+      const res = await getAllCampaigns(accounts[0].localAccountId);
+      setCampaigns(res);
       setIsLoading(false);
     };
     getCampaignData();
@@ -88,7 +63,6 @@ const Home = () => {
   const handleCloseDialog = () => {
     setShowNewEmailModal(false);
   };
-
   return (
     <>
       <AddContainer>
@@ -108,8 +82,12 @@ const Home = () => {
         )}
         <PaperListContainer>
           {campaigns.map((email) => (
-            <div onClick={() => onPostClick(email)}>
-              <EmailItem {...email} />
+            <div onClick={() => onPostClick(email.MSConversationId)}>
+              <EmailItem
+                email={email.vendorEmail}
+                name={email.vendorName}
+                company={email.vendorCompany}
+              />
             </div>
           ))}
         </PaperListContainer>

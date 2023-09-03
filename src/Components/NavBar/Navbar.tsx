@@ -1,18 +1,11 @@
 // import { UserButton } from "@clerk/clerk-react";
-import {
-  AppBar,
-  Box,
-  Button,
-  Tab,
-  Tabs,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, Button, Tab, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { FEPagePaths } from "../../Shared/constants";
 import { useMsal } from "@azure/msal-react";
+import ThemedButton from "../../Shared/Button/ThemedButton";
 
 const Container = styled.div`
   display: flex;
@@ -39,17 +32,14 @@ const TabLowerCase = styled(Tab)`
 
 const TabValues = {
   HOME: 0,
-  INTEGRATIONS: 1,
 };
 
 const TabLabels = {
   HOME: "Home",
-  INTEGRATIONS: "Manage Integrations",
 };
 
 const TabRoutes = {
   [TabValues.HOME]: FEPagePaths.HOME,
-  [TabValues.INTEGRATIONS]: FEPagePaths.INTEGRATIONS,
 };
 
 const Navbar = () => {
@@ -61,9 +51,8 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue);
-    navigate(TabRoutes[newValue]);
+  const onHomeClick = () => {
+    navigate(FEPagePaths.HOME);
   };
 
   const onLogoutClick = () => {
@@ -87,12 +76,10 @@ const Navbar = () => {
           </IconStyle>
           <NavBarRightSection>
             <Box mr={2}>
-              <Tabs value={selectedTab} onChange={handleTabChange} centered>
-                <TabLowerCase label={TabLabels.HOME} />
-                <TabLowerCase label={TabLabels.INTEGRATIONS} />
-              </Tabs>
+              <ThemedButton onClick={onHomeClick}>
+                {TabLabels.HOME}
+              </ThemedButton>
             </Box>
-            {/* <UserButton /> */}
             <Button onClick={onLogoutClick}>Logout</Button>
           </NavBarRightSection>
         </Toolbar>

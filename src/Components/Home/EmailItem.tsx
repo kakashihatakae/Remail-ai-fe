@@ -1,14 +1,11 @@
-import { Divider } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import React from "react";
 import { styled } from "styled-components";
 
 interface EmailItemProps {
-  title: String;
-  experience: String;
-  skills: String;
-  visa: String;
-  location: String;
-  rate: String;
+  email: string;
+  name: string;
+  company: string;
 }
 
 const Container = styled.div`
@@ -21,82 +18,43 @@ const Container = styled.div`
   border-width: 1px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: start;
   cursor: pointer;
   &:hover {
     box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.7);
   }
 `;
 
-const JobTitle = styled.div`
-  font-size: 20px;
-  font-weight: medium;
-`;
-
-const Location = styled.div`
-  font-size: 14px;
-  font-weight: light;
-  color: #5d5d5b;
-  margin-top: 4px;
-`;
-
-const Experience = styled.div`
-  font-weight: medium;
-  font-size: 20px;
-`;
-
-const Visa = styled.div`
-  font-size: 14px;
-  font-weight: light;
-  color: #5d5d5b;
-  margin-top: 4px;
-  margin-bottom: 16px;
-`;
-
-const Rate = styled.div`
-  padding-right: 16px;
-  font-size: 25px;
-  font-weight: 500;
-`;
-
 const JobDescription = styled.div`
   display: flex;
+  flex-direction: column;
   flex-direction: row;
   align-items: center;
 `;
 
-const Skills = styled.div`
-  font-size: 14px;
-  max-width: 300px;
+const EmailHeading = styled.div`
+  margin-top: 8px;
+  color: #5d5d5b;
 `;
 
 const EmailItem = ({
-  title,
-  experience,
-  skills,
-  visa,
-  location,
-  rate,
+  email,
+  name,
+  company,
 }: EmailItemProps): React.ReactElement => {
   return (
     <Container>
       <JobDescription>
-        <div>
-          <JobTitle>{title}</JobTitle>
-          <Location>Location: {location}</Location>
-          <Visa>Visa: {visa}</Visa>
-          <Skills>{skills}</Skills>
-        </div>
-        <Divider
-          orientation="vertical"
-          variant="middle"
-          flexItem
-          sx={{ mx: 3 }}
-        />
-        <Experience>{experience}</Experience>
+        <Typography variant="h5">{name}</Typography>
+        <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+        <Typography variant="h5" sx={{ color: "#2196f3" }}>
+          {company}
+        </Typography>
       </JobDescription>
-      <Rate>{rate}</Rate>
+      <EmailHeading>
+        <Typography>{email}</Typography>
+      </EmailHeading>
     </Container>
   );
 };
