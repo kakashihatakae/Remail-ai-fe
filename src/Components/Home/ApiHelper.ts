@@ -25,7 +25,8 @@ export const getGeneratedIntro = async (
   newMailInfo: VendorInformation & SenderInformation
 ) => {
   try {
-    const response = await fetch("http://127.0.0.1:8000/new-email-intro", {
+    const backendEndPoint = `${BASE_URL}/new-email-intro`;
+    const response = await fetch(backendEndPoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
