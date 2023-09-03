@@ -34,6 +34,7 @@ interface ThemedButtonProps {
   startIcon?: React.ReactNode;
   onClick: () => void;
   children: ReactNode;
+  disabled?: boolean;
 }
 
 const ThemedButton: React.FC<ThemedButtonProps> = ({
@@ -42,6 +43,7 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
   startIcon,
   onClick,
   children,
+  disabled,
 }) => {
   return (
     <ModifiedButton
@@ -49,6 +51,7 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
       color={color}
       startIcon={startIcon}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </ModifiedButton>

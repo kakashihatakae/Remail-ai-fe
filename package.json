@@ -8,7 +8,6 @@
     "@babel/plugin-proposal-private-property-in-object": "*",
     "@blocknote/core": "^0.9.0",
     "@blocknote/react": "^0.9.0",
-    "@clerk/clerk-react": "^4.23.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.3",
@@ -16,17 +15,14 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@tiptap/pm": "^2.0.4",
-    "@tiptap/react": "^2.0.4",
-    "@tiptap/starter-kit": "^2.0.4",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.40",
     "@types/react": "^18.2.19",
     "@types/react-dom": "^18.2.7",
     "express": "^4.18.2",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.7",
     "react-router-dom": "^6.14.2",
     "react-scripts": "5.0.1",
     "styled-components": "^6.0.7",
@@ -57,5 +53,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.197"
   }
 }

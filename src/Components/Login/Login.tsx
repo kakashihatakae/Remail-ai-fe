@@ -1,7 +1,7 @@
+import React from "react";
 import { InteractionType } from "@azure/msal-browser";
 import { useMsalAuthentication } from "@azure/msal-react";
 import { Box, Paper, Typography } from "@mui/material";
-import React from "react";
 import { styled } from "styled-components";
 import ThemedButton from "../../Shared/Button/ThemedButton";
 import { MicrosoftLogo } from "../../Static";
