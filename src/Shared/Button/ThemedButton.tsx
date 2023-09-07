@@ -1,13 +1,9 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { ReactNode } from "react";
 import { styled } from "styled-components";
 
 const ModifiedButton = styled(Button)`
   && {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
     text-transform: none;
     border-radius: 20px;
     color: #030303;
@@ -35,6 +31,8 @@ interface ThemedButtonProps {
   onClick: () => void;
   children: ReactNode;
   disabled?: boolean;
+  px?: number;
+  py?: number;
 }
 
 const ThemedButton: React.FC<ThemedButtonProps> = ({
@@ -44,6 +42,8 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
   onClick,
   children,
   disabled,
+  px,
+  py,
 }) => {
   return (
     <ModifiedButton
@@ -53,7 +53,9 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
     >
-      {children}
+      <Box px={px} py={py}>
+        {children}
+      </Box>
     </ModifiedButton>
   );
 };

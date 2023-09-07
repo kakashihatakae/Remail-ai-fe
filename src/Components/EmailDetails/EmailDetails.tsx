@@ -93,7 +93,7 @@ const EmailDetails = () => {
     try {
       const token = await getToken(accounts[0], instance);
       await sendDraftMessage(id, token);
-      setTimeout(() => window.location.reload(), 500);
+      setTimeout(() => window.location.reload(), 700);
     } catch (error) {
       console.log(
         `[EmailDetails/sendEmail]: failed to send email. Try again. Error: ${error}`
@@ -135,6 +135,7 @@ const EmailDetails = () => {
             id={email.id}
             receiverEmail={receipientEmail}
             receiverName={recepientName}
+            senderName={senderName}
             senderEmail={senderEmail}
             isEditing={email.isDraft}
             sendEmail={() => sendEmail(email.id)}

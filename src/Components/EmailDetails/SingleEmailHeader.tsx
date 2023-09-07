@@ -21,17 +21,20 @@ const SingleEmailHeader = ({
 }: SingleEmailHeaderprops) => {
   return (
     <Container>
-      <Typography variant="h6">{receiverName}</Typography>
+      <Typography variant="h6" fontWeight="bold">
+        {receiverName}
+      </Typography>
       <Typography
         sx={{
           display: "flex",
           alignItems: "center",
-          fontWeight: "medium",
+          fontWeight: "light",
           color: "#5d5d5b",
         }}
+        variant="body2"
       >
         {senderEmail}
-        <ArrowRightAltIcon sx={{ fontSize: 30, paddingX: 1 }} />
+        <ArrowRightAltIcon sx={{ paddingX: 1 }} />
         {receiverEmail}
       </Typography>
     </Container>
