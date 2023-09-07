@@ -9,9 +9,8 @@ interface EmailItemProps {
 }
 
 const Container = styled.div`
-  padding: 21px;
+  padding: 10px;
   margin-top: 5px;
-  margin-bottom: 7px;
   border-color: #ebebeb;
   border-radius: 10px;
   border-style: solid;
@@ -34,7 +33,6 @@ const JobDescription = styled.div`
 `;
 
 const EmailHeading = styled.div`
-  margin-top: 8px;
   color: #5d5d5b;
 `;
 
@@ -46,14 +44,18 @@ const EmailItem = ({
   return (
     <Container>
       <JobDescription>
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="body2" fontWeight="bold">
+          {name}
+        </Typography>
         <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
-        <Typography variant="h5" sx={{ color: "#2196f3" }}>
+        <Typography variant="body2" sx={{ color: "#2196f3" }}>
           {company}
         </Typography>
       </JobDescription>
       <EmailHeading>
-        <Typography>{email}</Typography>
+        <Typography variant="body2" fontWeight="light">
+          {email}
+        </Typography>
       </EmailHeading>
     </Container>
   );
