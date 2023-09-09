@@ -5,11 +5,17 @@ import { styled } from "styled-components";
 import EmailEditor from "./EmailEditor";
 import { useMsal } from "@azure/msal-react";
 import {
+  createDraftMessage,
   getToken,
   sendDraftMessage,
 } from "../../Shared/SharedApiHelper/SharedApiHelper";
 import { useMeInfo } from "../../Shared/MeContext/MeContext";
-import { getConversation } from "./ApiHelper";
+import {
+  createDraftToReply,
+  getConversation,
+  getGeneratedReply,
+  saveDraftInOutlook,
+} from "./ApiHelper";
 
 const LoadingContainer = styled.div`
   position: absolute;
@@ -68,6 +74,7 @@ const EmailDetails = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [campaign, setCampaign] = useState<any[]>([]);
+  console.log(campaign);
   const navigate = useNavigate();
 
   if (conversationId === undefined) {
@@ -96,13 +103,12 @@ const EmailDetails = () => {
       setTimeout(() => window.location.reload(), 700);
     } catch (error) {
       console.log(
+        // TODO:
+        // Show a toast if failed to send
         `[EmailDetails/sendEmail]: failed to send email. Try again. Error: ${error}`
       );
     }
   };
-
-  // TODO:
-  // Show a toast if failed to send
 
   return (
     <>
@@ -127,18 +133,48 @@ const EmailDetails = () => {
           email?.from?.emailAddress.name ||
           displayName;
 
-        const receipientEmail = email.toRecipients[0].emailAddress.address;
-        const recepientName = email.toRecipients[0].emailAddress.name;
+        // TODO: get meeting linke
+        const generateReply = async () => {
+          const token = await getToken(accounts[0], instance);
+          const createdReply = await createDraftToReply({
+            token,
+            id: email.id,
+          });
+          const isMeFollowUp = senderEmail === mail;
+          const newAIReply = await getGeneratedReply({
+            prevBodySent: email.body.content,
+            isMeFollowUp,
+            prevSender: email.sender.emailAddress,
+            // meetingLink: "",
+            // extraNotes: "",
+          });
+          const newReply = await saveDraftInOutlook(
+            newAIReply.body,
+            token,
+            createdReply.id,
+            ""
+          );
+          // const newEmail = await createDraftMessage({
+          //   ...newAIReply,
+          //   token,
+          //   vendorEmail: isMeFollowUp
+          //     ? email.toRecipients[0].emailAddress.address
+          //     : senderEmail,
+          // });          const isMeFollowUp = senderEmail === mail;
+          // console.log({ newReply });
+          setCampaign([...campaign, newReply]);
+        };
 
         return (
           <EmailEditor
             id={email.id}
-            receiverEmail={receipientEmail}
-            receiverName={recepientName}
+            receiverEmail={email.toRecipients[0].emailAddress.address}
+            receiverName={email.toRecipients[0].emailAddress.name}
             senderName={senderName}
             senderEmail={senderEmail}
             isEditing={email.isDraft}
             sendEmail={() => sendEmail(email.id)}
+            generateReply={() => generateReply()}
             body={email.body}
             subject={email.subject}
             key={index}

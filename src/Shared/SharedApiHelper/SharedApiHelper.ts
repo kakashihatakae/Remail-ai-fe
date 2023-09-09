@@ -26,6 +26,44 @@ export const sendDraftMessage = async (Id: String, token: string) => {
   }
 };
 
+export const createDraftMessage = async (
+  draftMessageInfo: Email & { vendorEmail: string; token: string }
+): Promise<any> => {
+  let draftResponse = {};
+  const body = {
+    subject: draftMessageInfo.subject,
+    body: {
+      contentType: "Text",
+      content: draftMessageInfo.body,
+    },
+    toRecipients: [
+      {
+        emailAddress: {
+          address: draftMessageInfo.vendorEmail,
+        },
+      },
+    ],
+  };
+  const graphEndPoint = `${MS_GRAPH_BASE_URL}/me/messages`;
+  try {
+    const response = await fetch(graphEndPoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${draftMessageInfo.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    draftResponse = await response.json();
+  } catch (error) {
+    throw new Error(
+      `[createDraftMessage]: failed to create a draft in outlook. Error: ${error}`
+    );
+  }
+  return draftResponse;
+};
+
 export const getToken = async (
   account: AccountInfo,
   instance: IPublicClientApplication

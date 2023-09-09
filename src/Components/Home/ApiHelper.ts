@@ -12,11 +12,6 @@ type SenderInformation = {
   senderEmail: string;
 };
 
-type Email = {
-  body: string;
-  subject: string;
-};
-
 /*
  * Permissions-
  * - Delegated : mail.send
@@ -45,64 +40,6 @@ export const getGeneratedIntro = async (
   } catch (error) {
     throw new Error(
       `[ApiHerlper/getGeneratedIntro]: openai failed to generate Intro. ${error}`
-    );
-  }
-};
-
-export const createDraftMessage = async (
-  draftMessageInfo: Email & { vendorEmail: string; token: string }
-): Promise<any> => {
-  let draftResponse = {};
-  const body = {
-    subject: draftMessageInfo.subject,
-    body: {
-      contentType: "Text",
-      content: draftMessageInfo.body,
-    },
-    toRecipients: [
-      {
-        emailAddress: {
-          address: draftMessageInfo.vendorEmail,
-        },
-      },
-    ],
-  };
-  const graphEndPoint = `${MS_GRAPH_BASE_URL}/me/messages`;
-  try {
-    const response = await fetch(graphEndPoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${draftMessageInfo.token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    draftResponse = await response.json();
-  } catch (error) {
-    throw new Error(
-      `[createDraftMessage]: failed to create a draft in outlook. Error: ${error}`
-    );
-  }
-  return draftResponse;
-};
-
-/*
- * Permissions-
- * - Delegated : mail.send
- */
-export const sendDraftMessage = async (Id: String, token: string) => {
-  try {
-    const graphEndPoint = `${MS_GRAPH_BASE_URL}/me/messages/${Id}/send`;
-    await fetch(graphEndPoint, {
-      method: "POST",
-      headers: {
-        Authorization: token,
-      },
-    });
-  } catch (error) {
-    throw new Error(
-      `[sendDraftMessage]: failed to send draft in outlook. Error: ${error}`
     );
   }
 };

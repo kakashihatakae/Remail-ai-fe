@@ -13,15 +13,14 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 // import { BASE_URL } from "../../Shared/constants";
-import {
-  createDraftMessage,
-  getGeneratedIntro,
-  saveConversationId,
-} from "./ApiHelper";
+import { getGeneratedIntro, saveConversationId } from "./ApiHelper";
 import { useMsal } from "@azure/msal-react";
 import { useMeInfo } from "../../Shared/MeContext/MeContext";
 import { FEPagePaths } from "../../Shared/constants";
-import { getToken } from "../../Shared/SharedApiHelper/SharedApiHelper";
+import {
+  createDraftMessage,
+  getToken,
+} from "../../Shared/SharedApiHelper/SharedApiHelper";
 
 const NewEmailButton = styled(Button)`
   && {

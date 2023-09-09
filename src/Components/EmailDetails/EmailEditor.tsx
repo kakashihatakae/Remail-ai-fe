@@ -67,7 +67,7 @@ interface EmailEditorProps {
   receiverEmail: string;
   senderName: string;
   senderEmail: string; // TODO: change
-
+  generateReply: () => void;
   sendEmail: () => void;
   createFollowup?: () => void;
   disableSendButton?: boolean;
@@ -80,6 +80,7 @@ const EmailEditor = ({
   senderEmail,
   subject,
   createFollowup,
+  generateReply,
   sendEmail,
   disableSendButton,
   body,
@@ -124,10 +125,8 @@ const EmailEditor = ({
             id,
             subjectDeb ?? subjectState
           );
-          console.log({ subjectDeb });
         };
         // TODO: try sending in html content type
-
         getEditorCont();
       }, 1500),
     []
@@ -160,7 +159,7 @@ const EmailEditor = ({
           />
         </div>
         <HeaderRightSection>
-          {isEditing
+          {isEditing && showDropdown
             ? showDropdown && (
                 <Box mr={3}>
                   <ThemedButton
@@ -174,7 +173,7 @@ const EmailEditor = ({
               )
             : showDropdown && (
                 <ThemedButton
-                  onClick={() => console.log("")}
+                  onClick={() => generateReply()}
                   startIcon={<ReplyIcon />}
                 >
                   Generate Reply
